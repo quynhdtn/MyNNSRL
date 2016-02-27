@@ -13,15 +13,24 @@ if __name__ == "__main__":
     parser.add_argument("wedata", help="WE Data path")
     parser.add_argument("output", help="Output")
     args = parser.parse_args()
-    txt = Text()
 
+    vob=set()
     if args.conll2009:
-        txt.readConll2009Sentences(args.srldata)
+        dt = args.srldata.split(",")
+        for dtt in dt:
+            txt = Text()
+            txt.readConll2009Sentences(dtt)
+            vob.union(txt.getVob())
+
     if args.conll2005:
-        txt.readConll2005Sentences(args.srldata)
+        dt = args.srldata.split(",")
+        for dtt in dt:
+            txt = Text()
+            txt.readConll2005Sentences(dtt)
+            vob.union(txt.getVob())
 
     d = WEDict(args.wedata)
-    d.extractWEForVob(txt.getVob(), args.output)
+    d.extractWEForVob(vob, args.output)
 
 
 

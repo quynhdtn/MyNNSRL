@@ -3,8 +3,6 @@ from liir.nlp.nnsrl.representation.Word import Word, Predicate
 __author__ = 'quynhdo'
 
 import re
-from nltk.tree import *
-import jpype
 
 
 # this class define a sentence which is a list of Word

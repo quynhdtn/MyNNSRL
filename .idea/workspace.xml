@@ -71,8 +71,8 @@
       <file leaf-file-name="ExtractWEDict.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/liir/nlp/nnsrl/utils/ExtractWEDict.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.56485355" vertical-offset="90" max-vertical-offset="630">
-              <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.7217573" vertical-offset="90" max-vertical-offset="630">
+              <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
               </folding>
@@ -346,7 +346,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="NNSRL" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/liir/nlp/nnsrl/utils/ExtractWEDict.py" />
-      <option name="PARAMETERS" value="-conll2009 $PROJECT_DIR$/../../../MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt,$PROJECT_DIR$/../../../MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation.txt,$PROJECT_DIR$/../../../MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-train.txt $PROJECT_DIR$/../../NNSRL/vob_we_reuters_300.txt test.txt" />
+      <option name="PARAMETERS" value="-conll2009 $PROJECT_DIR$/../../../MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt,$PROJECT_DIR$/../../../MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation.txt $PROJECT_DIR$/../../NNSRL/vob_we_reuters_300.txt test.txt" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
@@ -499,17 +499,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="415" y="98" width="1003" height="824" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35892323" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35892323" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.397351" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32980132" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32980132" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -630,8 +630,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/liir/nlp/nnsrl/utils/ExtractWEDict.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.56485355" vertical-offset="90" max-vertical-offset="630">
-          <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.7217573" vertical-offset="90" max-vertical-offset="630">
+          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
           </folding>

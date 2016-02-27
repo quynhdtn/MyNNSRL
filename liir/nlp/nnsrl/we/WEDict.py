@@ -45,13 +45,17 @@ class WEDict:
 
     def extractWEForVob(self, vob, output):
         f = open(output, "w")
+        c = 0
         for w in vob:
             if w in self.full_dict.keys():
                 f.write(w)
                 f.write(" ")
                 we = self.full_dict[w]
+                c += 1
                 for val in we:
                     f.write(str(val))
                     f.write(" ")
                 f.write("\n")
         f.close()
+        print ( "Words in WE dict: ")
+        print (str(c) + "/" + str(vob.size))

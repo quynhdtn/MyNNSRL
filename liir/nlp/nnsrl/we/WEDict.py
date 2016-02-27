@@ -1,7 +1,7 @@
 __author__ = 'quynhdo'
 
 import numpy as np
-
+import re
 
 class WEDict:
 
@@ -11,7 +11,7 @@ class WEDict:
         self.we_size = -1
         for l in f.readlines(): # read the full dictionary
             l = l.strip()
-            tmps = l.split("\\s+")
+            tmps = re.split('\s+', l)
             if len(tmps) > 1:
                 we = []
                 if self.we_size == -1:
@@ -58,4 +58,4 @@ class WEDict:
                 f.write("\n")
         f.close()
         print ( "Words in WE dict: ")
-        print (str(c) + "/" + str(vob.size))
+        print (str(c) + "/" + str(len(vob)))

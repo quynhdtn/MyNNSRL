@@ -65,6 +65,6 @@ class Text(list):
 
 if __name__=="__main__":
     txt = Text()
- #   txt.readConll2009Sentences("/Users/quynhdo/Documents/WORKING/Data/CoNLL2005/conll05st-release/test.brown/test.brown.txt")
-    txt.readConll2009Sentences("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt")
+    txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/Data/CoNLL2005/conll05st-release/test.brown/test.brown.txt")
+ #   txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt")
     print(len(txt))

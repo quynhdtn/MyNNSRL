@@ -20,14 +20,14 @@ if __name__ == "__main__":
         for dtt in dt:
             txt = Text()
             txt.readConll2009Sentences(dtt)
-            vob=vob.union(txt.getVob())
+            vob = vob.union(txt.getVob())
 
     if args.conll2005:
         dt = args.srldata.split(",")
         for dtt in dt:
             txt = Text()
             txt.readConll2005Sentences(dtt)
-            vob=vob.union(txt.getVob())
+            vob = vob.union(txt.getVob())
 
     d = WEDict(args.wedata)
     d.extractWEForVob(vob, args.output)

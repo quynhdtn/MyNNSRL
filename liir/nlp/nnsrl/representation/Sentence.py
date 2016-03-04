@@ -27,15 +27,15 @@ class SentenceConll2009(Sentence):
             temps=re.split("\\s+", line)
             dt.append(temps)
             w = Word(int(temps[0])-1, temps[1])
-            w.Word = temps[1].lower()
-            w.Lemma = temps[3]
-            w.Pos = temps[5]
-            w.Head = int(temps[9])-1
-            w.Deprel = temps[11]
+            w.word = temps[1].lower()
+            w.lemma = temps[3]
+            w.pos = temps[5]
+            w.head = int(temps[9])-1
+            w.deprel = temps[11]
 
             if "Y" in set(temps[12]):
                 w.__class__ = Predicate
-                w.Sense = temps[13]
+                w.sense = temps[13]
 
             self.append(w)
 
@@ -49,18 +49,18 @@ class SentenceConll2009(Sentence):
                     if lbl != "_":
                         args[self[int(tmps[0])-1]]=lbl
 
-                pred.Arguments = args
+                pred.arguments = args
                 pred_id += 1
 
         for w in self:
-            w.Sentence = self
+            w.sentence = self
 
         self.doDependency()
 
     def doDependency(self):
         for w in self:
-            self[w.Head].Children.append(w)
-            w.Head = self[w.Head]
+            self[w.head].children.append(w)
+            w.head = self[w.head]
 
 
 
@@ -86,9 +86,9 @@ class SentenceConll2005(Sentence):  # Sentence in Conll 2005
                 pos= "-lrb-"
             if pos == ")":
                 pos = "-rrb-"
-            w.Pos = pos
-            w.Parsebit = temps[2]
-            w.Word = temps[0].lower()
+            w.pos = pos
+            w.parsebit = temps[2]
+            w.word = temps[0].lower()
 
             if temps[5] != "-":
                 w.__class__= Predicate
@@ -124,9 +124,9 @@ class SentenceConll2005(Sentence):  # Sentence in Conll 2005
                             args.append("O")
                             j += 1
 
-                pred.Arguments = args
+                pred.arguments = args
                 pred_id += 1
         for w in self:
-            w.Sentence = self
+            w.sentence = self
 
 

@@ -63,6 +63,26 @@ class SentenceConll2009(Sentence):
             w.head = self[w.head]
 
 
+class SentenceConll2009POS(Sentence):
+    def __init__(self, data_lines=None):
+        Sentence.__init__(self)
+        if data_lines is None:
+            return
+        if not isinstance(data_lines, list):
+            return
+        dt = []
+        for line in data_lines:
+            temps=re.split("\\s+", line)
+            dt.append(temps)
+            w = Word(int(temps[0])-1, temps[1])
+            w.word = temps[1].lower()
+            w.pos = temps[4]
+            self.append(w)
+        for w in self:
+            w.sentence = self
+
+
+
 
 class SentenceConll2005(Sentence):  # Sentence in Conll 2005
 

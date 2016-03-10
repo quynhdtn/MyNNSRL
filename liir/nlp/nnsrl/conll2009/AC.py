@@ -88,4 +88,4 @@ if __name__ == "__main__":
 
 
 
-    print (f1_score(YPasList, YasList))
+    print (f1_score( YasList,YPasList))

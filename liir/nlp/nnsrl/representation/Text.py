@@ -1,5 +1,5 @@
 import re
-from liir.nlp.nnsrl.representation.Sentence import SentenceConll2005, SentenceConll2009
+from liir.nlp.nnsrl.representation.Sentence import SentenceConll2005, SentenceConll2009, SentenceConll2009POS
 
 __author__ = 'quynhdo'
 
@@ -47,6 +47,26 @@ class Text(list):
         for sen in sens:
             conll2009sen = SentenceConll2009(sen)
             self.append(conll2009sen)
+
+    def readConll2009SentencesPOS(self, path):
+        f = open(path, 'r')
+        sens=[]
+        words=[]
+
+        for l in f:
+            match = re.match("\\s+", l)
+            if match:
+                if len(words) != 0:
+                    sens.append(words)
+                    words = []
+            else:
+                words.append(l.strip())
+        if len(words) != 0:
+            sens.append(words)
+
+        for sen in sens:
+            possen = SentenceConll2009POS(sen)
+            self.append(possen)
 
     def getVob(self, type="all"):
         vob=set()

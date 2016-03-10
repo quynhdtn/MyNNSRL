@@ -1,8 +1,10 @@
 from liir.nlp.nnsrl.features.ContextFeature import ContextFeature
 from liir.nlp.nnsrl.features.EnumDeclaration import FeatureName, WordData, TargetWord
+from liir.nlp.nnsrl.features.NeighbourFeature import NeighbourFeature
 from liir.nlp.nnsrl.features.WEWrapper import WEWrapper
 from liir.nlp.nnsrl.features.WordFeature import WordFeature
 from liir.nlp.nnsrl.features.WordPairFeature import WordPairContextFeature
+from liir.nlp.nnsrl.we.CWEDict import CWEDict
 from liir.nlp.nnsrl.we.WEDict import WEDict
 
 __author__ = 'quynhdo'
@@ -19,6 +21,9 @@ class FeatureGenerator(list):
                 tmps = line.split(" ")
                 if len(tmps) == 2:
                     wed = WEDict(tmps[1])
+                    self.we_dicts[tmps[0]]=wed
+                if len(tmps) == 3:
+                    wed = CWEDict(tmps[1], tmps[2])
                     self.we_dicts[tmps[0]]=wed
 
         self.ParseFeatureFile(feature_file)
@@ -75,5 +80,15 @@ class FeatureGenerator(list):
 
         if fn == FeatureName.PredicateContext:
             return ContextFeature(fn, WordData.Word, TargetWord.Word, pos=1, windows=attr['w'])
+
+        if fn == FeatureName.NeighbourWord:
+            return NeighbourFeature(fn, WordData.Word, TargetWord.Word, nei= int(attr['p']))
+
+        if fn == FeatureName.NeighbourPOS:
+            return NeighbourFeature(fn, WordData.Pos, TargetWord.Word, nei= int(attr['p']))
+
+
+        if fn == FeatureName.IsCapital:
+            return WordFeature(fn, WordData.Capital, TargetWord.Word)
 
 

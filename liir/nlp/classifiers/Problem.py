@@ -31,6 +31,19 @@ class Problem(object):
         self.model.train(X,Y, model_path)
         self.is_trained=True
 
+    def getFeatureForTrain(self, ds, model_path=None):
+        ds.extractFeature(self.fg)
+        X,Y=None,None
+        if self.used_sequence:
+            X,Y = ds.asSequence(self.fg)
+
+        else:
+            X,Y = ds.asMatrix(self.fg)
+
+            self.labels = list(np.unique(Y))
+            Y = [str(self.labels.index(y)) for y in Y]
+        return X,Y
+
     def predict (self, ds):
         if not self.is_trained:
             return None

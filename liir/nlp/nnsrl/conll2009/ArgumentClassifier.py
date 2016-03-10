@@ -141,8 +141,7 @@ if __name__ == "__main__":
         ac.save(args.six)
     if args.test:
 
-        ac = pickle.load( open(args.one, "rb" ))
-        txt = Text()
+
         txt.readConll2009Sentences(args.two)
 
         ac.predict_sequence(txt, args.three, args.four)

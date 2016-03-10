@@ -1,5 +1,6 @@
 from liir.nlp.nnsrl.features.EnumDeclaration import WordData
 from liir.nlp.nnsrl.features.Feature import Feature
+from liir.nlp.nnsrl.representation.Word import Word
 
 __author__ = 'quynhdo'
 
@@ -21,7 +22,12 @@ class WordFeature(Feature):
 
     def getFeatureValue(self, ins, used_for_training=True):
         wIns = None
-        wIns = ins[self.target_position]
+        if isinstance(ins, Word):
+            wIns = ins
+        else:
+
+
+            wIns = ins[self.target_position]
 
         wTarget = wIns.getWord(self.target_word)
         if wTarget is None:
@@ -41,6 +47,10 @@ class WordFeature(Feature):
                 else:
                     if self.word_data == WordData.Lemma:
                         rs = wTarget.lemma
+                    else:
+                        if self.word_data == WordData.Capital:
+                            rs = wTarget.form[0].isupper()
+
 
         if used_for_training:
             self.addFeatureValueToMap(rs)

@@ -49,4 +49,17 @@ class CRFModel(Model):
                       #  for i in range(len(yseq)):
                       #      print(tagger.marginal(yseq[i],i))
                         Ypredict.append(yseq)
+
+        from collections import Counter
+        info = self.classifier.info()
+
+        def print_transitions(trans_features):
+            for (label_from, label_to), weight in trans_features:
+                print("%-6s -> %-7s %0.6f" % (label_from, label_to, weight))
+
+        print("Top likely transitions:")
+        print_transitions(Counter(info.transitions).most_common(15))
+
+        print("\nTop unlikely transitions:")
+        print_transitions(Counter(info.transitions).most_common()[-15:])
         return Ypredict

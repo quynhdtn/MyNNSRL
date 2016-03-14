@@ -1,4 +1,5 @@
 import pycrfsuite
+from sklearn import preprocessing
 from liir.nlp.nnsrl.features import Feature
 import numpy as np
 from scipy.sparse import csr_matrix, lil_matrix
@@ -9,6 +10,7 @@ class DataSet(list):
 
     def __init__(self):
         list.__init__(self)
+        self.label_map={}
 
     def add(self, ins, lbl = None):
         self.append((ins, lbl))
@@ -17,6 +19,12 @@ class DataSet(list):
         if isinstance(ins, list):
             self.append(ins)
 
+    def longestInstance(self):
+        m = 0
+        for d in self:
+            if len(d[0])>m:
+                m=len(d[0])
+        return m
 
     def extractFeature(self,f):
         if isinstance(f,list):
@@ -91,6 +99,57 @@ class DataSet(list):
 
             X.append(iq)
             Y.append(sq_lbl)
+        return X,Y
+
+
+
+    def asSequenceNumpy(self, fl, store_label_map = False):
+        s = 0
+        for f in fl:
+            s += f.size()
+        X=[]
+        Y=[]
+        for x in self:
+            if not isinstance(x, list):
+                return None
+
+            sq_dt= lil_matrix((len(x),s), dtype=float)
+            sq_lbl=[]
+
+            for i in range(len(x)):
+                xsq =x [i]
+
+                ids= xsq[0].getIndices2(fl)
+                for idx, v in ids.items():
+                    sq_dt[i, idx]=v
+
+                sq_lbl.append(xsq[1])
+            X.append(sq_dt.todense())
+            Y.append(sq_lbl)
+
+        if store_label_map:
+            Yflat=[]
+            for yy in Y:
+                for yyy in yy:
+                    Yflat.append(yyy)
+            classes = list(np.unique(Yflat))
+            for c in classes:
+                self.label_map[c]=classes.index(c)
+
+        Ybi = []
+
+        for y in Y:
+                ybb=[]
+                for yy in y:
+                    yb = np.zeros((1, len(self.label_map)))
+                    yb[0,self.label_map[yy]]=1
+                    ybb.append(yb)
+                Ybi.append(ybb)
+        Y=Ybi
+
+        X_t = np.asarray(X)
+        print(X_t.shape)
+
         return X,Y
 
 

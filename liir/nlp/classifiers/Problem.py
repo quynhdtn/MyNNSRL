@@ -13,6 +13,7 @@ class Problem(object):
         self.model = model
         self.labels = None
         self.used_sequence = used_sequence
+        self.label_map={}
 
     def loadFeatureConfig (self, fea_config_file, we_config_file=None):
         self.fg = FeatureGenerator(fea_config_file, we_config_file)
@@ -43,6 +44,30 @@ class Problem(object):
             self.labels = list(np.unique(Y))
             Y = [str(self.labels.index(y)) for y in Y]
         return X,Y
+
+    def getFeatureForTrainNumpy(self, ds):
+        ds.extractFeature(self.fg)
+
+        X,Y = ds.asSequenceNumpy(self.fg, True)
+        self.label_map=ds.label_map
+
+        return X,Y
+
+    def getFeatureForTestNumpy(self, ds):
+
+        ds.extractFeature(self.fg)
+        ds.label_map = self.label_map
+        X,Y = ds.asSequenceNumpy(self.fg, False)
+
+        return X,Y
+
+
+    def predictLstm(self, ds):
+        X,Y= self.getFeatureForTestNumpy(ds)
+        rs = self.model.predict(X, self.label_map)
+
+        return rs
+
 
     def predict (self, ds):
         if not self.is_trained:

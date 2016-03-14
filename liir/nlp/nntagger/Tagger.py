@@ -2,8 +2,10 @@ import argparse
 import pickle
 from keras.preprocessing import sequence
 from sklearn import preprocessing
+from liir.nlp.classifiers.BidirectionalLSTMModel import BidirectionalLSTMModel
 from liir.nlp.classifiers.CRFModel import CRFModel
 from liir.nlp.classifiers.Problem import Problem
+from liir.nlp.classifiers.S2SModel import S2SModel
 from liir.nlp.classifiers.SimpleLSTMModel import SimpleLSTMModel
 from liir.nlp.nnsrl.ml.DataSet import DataSet
 from liir.nlp.nnsrl.ml.Instance import Instance
@@ -129,7 +131,7 @@ class Tagger:
             rms = RMSprop()
             model.compile(loss='categorical_crossentropy', optimizer=rms,sample_weight_mode="temporal")
 
-            model.fit(X_train, Y_train, batch_size=10, nb_epoch=200, show_accuracy=True, sample_weight=np.asarray(sw))
+            model.fit(X_train, Y_train, batch_size=10, nb_epoch=600, show_accuracy=True, sample_weight=np.asarray(sw))
 
             res = model.predict_classes(X_train)
 
@@ -150,7 +152,40 @@ class Tagger:
             print (accuracy_score(y_gold,y_pred))
 
 
+    def train_lstm_test(self, txt):
+        ds = DataSet()
 
+        for sen in txt:
+                    l=[]
+                    for w in sen:
+
+                            ins = Instance(w)
+                            l.append((ins, w.pos))
+                    ds.addSeq(l)
+
+        X,Y = self.prob.getFeatureForTrainNumpy(ds)
+        print ( "Finish processing data")
+
+        lstm = S2SModel(input_dim=X[0].shape[1], maxlen=100, lstm_size=128, output_dim=len(self.prob.label_map.keys()))
+
+        self.prob.model = lstm
+        lstm.train(X,Y, nb_epoch=1200)
+
+
+    def predict_lstm_test(self, txt):
+        ds = DataSet()
+
+        for sen in txt:
+                    l=[]
+                    for w in sen:
+
+                            ins = Instance(w,False)
+                            l.append((ins, w.pos))
+                    ds.addSeq(l)
+
+
+
+        return self.prob.predictLstm(ds)
 
     def train_sequence(self, txt, use_lstm=False):
         ds = DataSet()
@@ -174,7 +209,7 @@ class Tagger:
             l=[]
             for w in sen:
 
-                    ins = Instance(w)
+                    ins = Instance(w,False)
                     l.append((ins, w.pos))
             ds.addSeq(l)
 
@@ -230,18 +265,35 @@ if __name__=="__main__":
 
     txt=Text()
     txt.readConll2009SentencesPOS("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt")
-    '''
-    tg.use_CRF()
-    tg.train_sequence(txt[0:10])
-    tg.save("posConll2009SG300.mdl")
+
+   # tg.use_CRF()
+   # tg.train_sequence(txt[0:10])
+    #tg.save("postag.mdl")
 
 
-    tg = pickle.load( open("postag.mdl", "rb" ))
+
+
+    tg.train_lstm_test(txt[0:10])
+  #  tg.save("postag.mdl")
+
+   # tg = pickle.load( open("postag.mdl", "rb" ))
     txttest=Text()
     txttest.readConll2009SentencesPOS("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation.txt")
 
-    Ypredict = tg.predict_sequence(txt[0:10],"out.txt")
+    Ypredict = tg.predict_lstm_test(txt[0:10])
     print(Ypredict)
-    '''
 
-    tg.train_lstm(txt[0:10])
+    yf = []
+    for yy in Ypredict:
+        for yyy in yy:
+            yf.append(yyy)
+
+    yg=[]
+
+    for s in txt[0:10]:
+        for w in s:
+            yg.append(w.pos)
+
+    from sklearn.metrics import accuracy_score
+    print (accuracy_score(yg, yf))
+

@@ -80,7 +80,7 @@ class BidirectionalLSTMModel(Model):
 
         X =  self.pad_sequences(X_train, self.maxlen)
         print (X.shape)
-        Y_train = sequence.pad_sequences(y_train, maxlen=self.maxlen, padding='post')
+        Y_train = self.pad_sequences(y_train, self.maxlen)
         Y_train=Y_train.reshape(Y_train.shape[0],Y_train.shape[1], Y_train.shape[3])
         print(Y_train.shape)
 
@@ -145,14 +145,22 @@ class BidirectionalLSTMModel(Model):
     def pad_sequences(self, arr, maxlen):
         newarr=[]
         for sen in arr:
-            s = sen.tolist()
+            if isinstance(sen, list):
+                s=sen
+            else:
+                s = sen.tolist()
             l=len(s)
             if l < maxlen:
                 for i in range(l, maxlen):
-                    s.append(np.zeros((len(s[0]))))
+                    si=0
+                    if isinstance(s[0], list):
+                        si = len(s[0])
+                        s.append(np.zeros((si)))
+                    else:
+
+                        s.append(np.zeros(s[0].shape))
 
             newarr.append(s)
-        print(newarr)
         return np.asarray(newarr)
 
 

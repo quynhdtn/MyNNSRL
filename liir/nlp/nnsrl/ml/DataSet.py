@@ -136,6 +136,7 @@ class DataSet(list):
                     idx+=1
                 lxm=np.asarray(lx)
                 lxm=lxm.reshape(lxm.shape[0],lxm.shape[2])
+                print(lxm.shape)
                 X.append(lxm)
                 Y.append(ly)
 

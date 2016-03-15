@@ -20,7 +20,7 @@ class NeighbourFeature(Feature):
         self.target_position = pos
         self.nei = nei
 
-    def getFeatureValue(self, ins, used_for_training=True):
+    def getFeatureValue(self, ins):
         wIns = None
         if isinstance(ins, Word):
             wIns=ins
@@ -56,11 +56,5 @@ class NeighbourFeature(Feature):
                             rs = wTarget.form[0].isupper()
 
 
-        if used_for_training:
-            self.addFeatureValueToMap(rs)
+
         return rs
-
-
-
-
-

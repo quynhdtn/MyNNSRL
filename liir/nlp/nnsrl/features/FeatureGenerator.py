@@ -87,6 +87,13 @@ class FeatureGenerator(list):
         if fn == FeatureName.NeighbourPOS:
             return NeighbourFeature(fn, WordData.Pos, TargetWord.Word, nei= int(attr['p']))
 
+        if fn == FeatureName.PredNeighbourWord:
+            return NeighbourFeature(fn, WordData.Word, TargetWord.Word, pos=1, nei= int(attr['p']))
+
+
+        if fn == FeatureName.PredNeighbourPOS:
+            return NeighbourFeature(fn, WordData.Pos, TargetWord.Word, pos=1, nei= int(attr['p']))
+
 
         if fn == FeatureName.IsCapital:
             return WordFeature(fn, WordData.Capital, TargetWord.Word)

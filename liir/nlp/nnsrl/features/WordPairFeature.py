@@ -11,7 +11,7 @@ class WordPairContextFeature(Feature):
         self.pos2=pos_2
         self.windows = int(windows)
 
-    def getFeatureValue(self, ins, used_for_training=True):
+    def getFeatureValue(self, ins):
         w1 = ins[self.pos1]
         w2 = ins[self.pos2]
 
@@ -21,8 +21,8 @@ class WordPairContextFeature(Feature):
         if abs(posInSentence1-posInSentence2) <= (self.windows -1)//2:
             v = 1
 
-        if used_for_training:
-            self.addFeatureValueToMap(v)
+
+
         return v
 
 class WordPairFeature(Feature):
@@ -32,7 +32,7 @@ class WordPairFeature(Feature):
         self.pos2=pos_2
         self.wpd = wpd
 
-    def getFeatureValue(self, ins, used_for_training=True):
+    def getFeatureValue(self, ins):
         w1 = ins[self.pos1]
         w2 = ins[self.pos2]
 
@@ -48,10 +48,6 @@ class WordPairFeature(Feature):
             if posInSentence1 < posInSentence2:
                 v = 2
 
-
-
-        if used_for_training:
-            self.addFeatureValueToMap(v)
         return v
 
 

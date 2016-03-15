@@ -21,7 +21,13 @@ class FeatureName(Enum):
 
     NeighbourPOS = 'NeighbourPOS'
 
+    PredNeighbourWord= "PredNeighbourWord"
 
+    PredNeighbourPOS = "PredNeighbourPOS"
+
+    WEPredNeighbourWord= "WEPredNeighbourWord"
+
+    WEPredNeighbourPOS = "WEPredNeighbourPOS"
 class WordData(Enum):
     Word = 'word'
     Pos = 'pos'

@@ -19,7 +19,10 @@ class Problem(object):
         self.fg = FeatureGenerator(fea_config_file, we_config_file)
 
     def train(self, ds, model_path=None):
-        ds.extractFeature(self.fg)
+        X,Y=ds.extractFeatureForMatrix(self.fg)
+        print (X)
+        print (Y)
+        '''
         X,Y=None,None
         if self.used_sequence:
             X,Y = ds.asSequence(self.fg)
@@ -29,11 +32,14 @@ class Problem(object):
 
             self.labels = list(np.unique(Y))
             Y = [str(self.labels.index(y)) for y in Y]
+
+
         self.model.train(X,Y, model_path)
         self.is_trained=True
+        '''
 
     def getFeatureForTrain(self, ds, model_path=None):
-        ds.extractFeature(self.fg)
+        ds.extractFeatureForMatrix(self.fg)
         X,Y=None,None
         if self.used_sequence:
             X,Y = ds.asSequence(self.fg)
@@ -46,24 +52,23 @@ class Problem(object):
         return X,Y
 
     def getFeatureForTrainNumpy(self, ds):
-        ds.extractFeature(self.fg)
+        X,Y=ds.extractFeatureForMatrix(self.fg)
 
-        X,Y = ds.asSequenceNumpy(self.fg, True)
         self.label_map=ds.label_map
 
         return X,Y
 
     def getFeatureForTestNumpy(self, ds):
-
-        ds.extractFeature(self.fg)
         ds.label_map = self.label_map
-        X,Y = ds.asSequenceNumpy(self.fg, False)
+
+        X,Y=ds.extractFeatureForMatrix(self.fg, store_label_map=False)
 
         return X,Y
 
 
     def predictLstm(self, ds):
-        X,Y= self.getFeatureForTestNumpy(ds)
+        ds.label_map = self.label_map
+        X,Y= ds.extractFeatureForMatrix(self.fg)
         rs = self.model.predict(X, self.label_map)
 
         return rs

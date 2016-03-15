@@ -3,6 +3,8 @@ from sklearn import preprocessing
 from liir.nlp.nnsrl.features import Feature
 import numpy as np
 from scipy.sparse import csr_matrix, lil_matrix
+import time
+from liir.nlp.nnsrl.features.WEWrapper import WEWrapper
 
 __author__ = 'quynhdo'
 
@@ -22,19 +24,164 @@ class DataSet(list):
     def longestInstance(self):
         m = 0
         for d in self:
-            if len(d[0])>m:
-                m=len(d[0])
+            if len(d)>m:
+                m=len(d)
         return m
 
+
+    def extractFeatureForMatrix(self, f, store_label_map=True):
+        WEf = []
+        NonWEf=[]
+        rs=None
+
+        for ff in f:
+
+                if isinstance(ff, WEWrapper):
+                    WEf.append(ff)
+                else:
+                    NonWEf.append(ff)
+
+        print(WEf)
+        print(NonWEf)
+        if (len(NonWEf) >0):
+
+            offset=  0
+            for i in range(0, len(NonWEf)):
+                if i>0:
+                    offset += NonWEf[i-1].size()
+                print ("Extracting for ")
+                print (NonWEf[i].feature_name)
+                start_time = time.time()
+                for x in self:
+                    if isinstance(x, tuple):
+
+                        x[0].extractFeature(NonWEf[i], offset=offset)
+
+                    if isinstance(x, list):
+                        for xi in x:
+                            xi[0].extractFeature(ff, offset=offset)
+                print("--- %s seconds ---" % (time.time() - start_time))
+
+            # make matrix:
+            s = 0
+            for ff in NonWEf:
+                s+= ff.size()
+            t=0
+            if isinstance(self[0], tuple):
+                t+= len(self)
+            else:
+                for x in self:
+
+                        t+=len(x)
+
+            rs = lil_matrix((t,s), dtype=float)
+            ins_pos = 0
+            for x in self:
+                    if isinstance(x, tuple):
+                        for idx, v in x[0].indices.items():
+                            rs[ins_pos,idx]=1
+                        ins_pos+=1
+
+
+                    if isinstance(x, list):
+                        for xi in x:
+                            for idx, v in xi[0].indices.items():
+                                rs[ins_pos,idx]=1
+                            ins_pos+=1
+
+            rs = rs.todense()
+            print(rs.shape)
+        for f in WEf:
+            print (f.feature_name)
+            start_time = time.time()
+            m=[]
+            for x in self:
+                    if isinstance(x, tuple):
+                        v= x[0].extractFeature(f)
+                        m.append(v)
+
+
+                    if isinstance(x, list):
+                        for xi in x:
+                            v = xi[0].extractFeature(f)
+                            m.append(v)
+
+            print (m[0].shape)
+            m=np.asarray(m)
+            print(m.shape)
+            if len(m.shape)>2:
+                m=m.reshape(m.shape[0],m.shape[2])
+            if rs is None:
+                rs = m
+            else:
+                rs = np.concatenate((rs,m), axis=1)
+            print(rs.shape)
+            print("--- %s seconds ---" % (time.time() - start_time))
+
+        print ("Shape")
+        print(rs.shape)
+
+        X=[]
+        Y=[]
+        idx = 0
+        if  isinstance(self[0], tuple):
+            X=rs
+        else:
+            for x in self:
+                lx=[]
+                ly=[]
+                for xi in x:
+                    lx.append(rs[idx,:])
+                    ly.append(xi[1])
+                    idx+=1
+                lxm=np.asarray(lx)
+                lxm=lxm.reshape(lxm.shape[0],lxm.shape[2])
+                X.append(lxm)
+                Y.append(ly)
+
+        if store_label_map:
+            Yflat=[]
+            for yy in Y:
+                for yyy in yy:
+                    Yflat.append(yyy)
+            classes = list(np.unique(Yflat))
+            for c in classes:
+                self.label_map[c]=classes.index(c)
+
+            Ybi = []
+
+            for y in Y:
+                    ybb=[]
+                    for yy in y:
+                        yb = np.zeros((1, len(self.label_map)))
+                        yb[0,self.label_map[yy]]=1
+                        ybb.append(yb)
+                    Ybi.append(ybb)
+            Y=Ybi
+
+            print(len(X))
+            print (X[0].shape)
+            print(len(Y))
+        return X,Y
+
+    '''
     def extractFeature(self,f):
+
+        print ("Start extracting feature ")
+
         if isinstance(f,list):
                 for ff in f:
+                    print (ff.feature_name)
+                    start_time = time.time()
                     for x in self:
                         if isinstance(x, tuple):
                             x[0].extractFeature(ff)
                         if isinstance(x, list):
                             for xi in x:
                                 xi[0].extractFeature(ff)
+                    print("--- %s seconds ---" % (time.time() - start_time))
+
+
         else:
             for x in self:
                 if isinstance(x, tuple):
@@ -44,7 +191,7 @@ class DataSet(list):
                                 xi[0].extractFeature(f)
 
 
-
+    '''
 
     # this only works for non-sequence classification
     def asMatrix(self, fl, use_sparse = False):
@@ -104,6 +251,7 @@ class DataSet(list):
 
 
     def asSequenceNumpy(self, fl, store_label_map = False):
+        print ("Start building matrix...")
         s = 0
         for f in fl:
             s += f.size()

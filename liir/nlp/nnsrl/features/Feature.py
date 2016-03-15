@@ -33,6 +33,37 @@ class Feature(object):
     def getFeatureValue(self, ins, used_for_training=True):
         pass
 
+    def extractFeature(self, ins, indices=None, offset=0, used_for_training=True):
+        v = self.getFeatureValue(ins)
+
+        if isinstance(v, list) or isinstance(v, set):
+
+            for val in v:
+                idx = None
+                if val in self.map.keys():
+                    idx= self.map[val]
+                else:
+                    if used_for_training:
+                        idx = self.current_index
+                        self.map[val]= self.current_index
+                        self.current_index+=1
+                if idx is not None:
+                    indices[offset + idx]=1
+        else:
+            idx = None
+            if v in self.map.keys():
+                    idx= self.map[v]
+            else:
+                    if used_for_training:
+                        idx = self.current_index
+                        self.map[v]= self.current_index
+                        self.current_index+=1
+            if idx is not None:
+                    indices[offset + idx]=1
+
+
+
+
     def getIndexSingle(self, value, offset):
 
         if value in self.map.keys():

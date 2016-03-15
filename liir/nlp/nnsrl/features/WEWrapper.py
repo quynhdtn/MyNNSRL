@@ -16,9 +16,8 @@ class WEWrapper(Feature):
             return self.wedict.we_size * self.val.windows
         return self.wedict.we_size
 
-    def getFeatureValue(self, ins, used_for_training = True):
-        return self.val.getFeatureValue(ins, used_for_training)
-
+    def getFeatureValue(self, ins):
+        return self.val.getFeatureValue(ins)
 
 
     def getRepresentationIndex(self, value, offset=0):
@@ -41,5 +40,27 @@ class WEWrapper(Feature):
 
         return rs
 
+
+
+    def extractFeature(self, ins, indices=None, offset=0):
+        v = self.getFeatureValue(ins)
+        if  v is None:
+            return np.zeros(self.wedict.we_size)
+        if isinstance(v, list) or isinstance(v, set):
+            arr = []
+            for vv in v:
+                av = self.wedict.getWE(vv)
+                arr.append(av)
+
+            arr = np.asmatrix(arr)
+
+
+            arr = np.mean(arr, axis=0)
+
+        else:
+
+            arr = self.wedict.getWE(v)
+
+        return arr
 
 

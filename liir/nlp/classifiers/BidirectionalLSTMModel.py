@@ -65,8 +65,10 @@ class BidirectionalLSTMModel(Model):
         :param show_accuracy:
         :return:
         '''
+        print("start training")
         sw = []
         for s in X_train:
+            print(s.shape)
             if (s.shape[0]< self.maxlen):
                 ww = [1 for i in range(0,s.shape[0])]
                 for i in range(s.shape[0], self.maxlen):
@@ -144,11 +146,13 @@ class BidirectionalLSTMModel(Model):
         newarr=[]
         for sen in arr:
             s = sen.tolist()
-            if len(sen) < maxlen:
-                for i in range(len(sen), maxlen):
+            l=len(s)
+            if l < maxlen:
+                for i in range(l, maxlen):
                     s.append(np.zeros((len(s[0]))))
 
             newarr.append(s)
+        print(newarr)
         return np.asarray(newarr)
 
 

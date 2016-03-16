@@ -48,6 +48,7 @@ class Bidirectional(Recurrent):
         self.trainable_weights = self.forward.trainable_weights + self.backward.trainable_weights
 
     def set_previous(self, layer, connection_map={}):
+        print ("call here")
         assert self.nb_input == layer.nb_output == 1, "Cannot connect layers: input count and output count should be 1."
         if hasattr(self, 'input_ndim'):
             assert self.input_ndim == len(layer.output_shape), "Incompatible shapes: layer expected input with ndim=" +\

@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
    #txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/Data/conll2005/conll05st-release/test.brown/test.brown.txt")
 
-    tg.train_lstm_test(txt)
+    tg.train_lstm_test(txt[0:10])
 
    #txt1=Text()
    #txt1.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/Data/conll2005/conll05st-release/test.brown/test.brown.txt")

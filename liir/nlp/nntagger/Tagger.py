@@ -166,7 +166,8 @@ class Tagger:
         X,Y = self.prob.getFeatureForTrainNumpy(ds)
         print ( "Finish processing data")
 
-        lstm = S2SModel(input_dim=X[0].shape[1], maxlen=100, lstm_size=128, output_dim=len(self.prob.label_map.keys()))
+        lstm = SimpleLSTMModel(input_dim=X[0].shape[1], maxlen=100, lstm_size=128, output_dim=len(self.prob.label_map.keys()),
+                               num_layers=3)
 
         self.prob.model = lstm
         lstm.train(X,Y, nb_epoch=1200)
@@ -259,12 +260,31 @@ class Tagger:
 
 if __name__=="__main__":
 
-    tg = Tagger("/Users/quynhdo/Documents/WORKING/PhD/NewWorkspace/NNSRL/fea/posfea2",
-                "/Users/quynhdo/Documents/WORKING/PhD/NewWorkspace/NNSRL/fea/we.config", ".")
+    parser = argparse.ArgumentParser()
+
+
+
+    parser.add_argument("one", help="fea file")
+    parser.add_argument("two", help="we file")
+    parser.add_argument("three", help="temp folder")
+    parser.add_argument("four", help="data file")
+    parser.add_argument("five",nargs='?', help="temp folder", default="temp")
+    parser.add_argument("six",nargs='?', help="Model save path if TRAIN", default="srl.mdl")
+
+    args = parser.parse_args()
+
+
+    #tg = Tagger("/Users/quynhdo/Documents/WORKING/PhD/NewWorkspace/NNSRL/fea/posfea2",
+    #            "/Users/quynhdo/Documents/WORKING/PhD/NewWorkspace/NNSRL/fea/we.config", ".")
   #  txt = readTreeBank()[0:3000]
 
+    tg = Tagger(args.one,
+               args.two, args.three)
+
     txt=Text()
-    txt.readConll2009SentencesPOS("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt")
+    #txt.readConll2009SentencesPOS("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt")
+
+    txt.readConll2009SentencesPOS(args.four)
 
    # tg.use_CRF()
    # tg.train_sequence(txt[0:10])
@@ -273,15 +293,20 @@ if __name__=="__main__":
 
 
 
-    tg.train_lstm_test(txt[0:10])
+    tg.train_lstm_test(txt)
   #  tg.save("postag.mdl")
 
    # tg = pickle.load( open("postag.mdl", "rb" ))
     txttest=Text()
-    txttest.readConll2009SentencesPOS("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation.txt")
+    txttest.readConll2009SentencesPOS(args.five)
 
-    Ypredict = tg.predict_lstm_test(txt[0:10])
-    print(Ypredict)
+    Ypredict = tg.predict_lstm_test(txttest)
+
+    #print(Ypredict)
+    f = open(args.six + "_" + "pos.txt","w")
+
+    f.write(Ypredict)
+    f.close()
 
     yf = []
     for yy in Ypredict:
@@ -290,7 +315,31 @@ if __name__=="__main__":
 
     yg=[]
 
-    for s in txt[0:10]:
+    for s in txttest:
+        for w in s:
+            yg.append(w.pos)
+
+    from sklearn.metrics import accuracy_score
+    print (accuracy_score(yg, yf))
+
+    txttest=Text()
+    txttest.readConll2009SentencesPOS(args.six)
+
+    Ypredict = tg.predict_lstm_test(txttest)
+
+    f = open(args.six + "_" + "pos.txt","w")
+
+    f.write(Ypredict)
+    f.close()
+
+    yf = []
+    for yy in Ypredict:
+        for yyy in yy:
+            yf.append(yyy)
+
+    yg=[]
+
+    for s in txttest:
         for w in s:
             yg.append(w.pos)
 

@@ -15,7 +15,7 @@ __author__ = 'quynhdo'
 
 import numpy as np
 class SimpleLSTMModel(Model):
-    def __init__(self, input_dim,maxlen, lstm_size, output_dim):
+    def __init__(self, input_dim,maxlen, lstm_size, output_dim, num_layers=1):
         Model.__init__(self)
         self.classifier = None
         self.maxlen=maxlen
@@ -23,6 +23,9 @@ class SimpleLSTMModel(Model):
         model.add(Masking(input_shape=(maxlen, input_dim) ))
      #   model.add(Embedding(max_features, 128, input_length=maxlen))
         model.add(LSTM(lstm_size, input_dim=input_dim, return_sequences=True))  # try using a GRU instead, for fun
+
+        for i in range(1,num_layers):
+            model.add(LSTM(lstm_size, input_dim=lstm_size, return_sequences=True))  # try using a GRU instead, for fun
         #model.add(Dense(lstm_size, output_dim))
         model.add(TimeDistributedDense(output_dim=output_dim, input_dim=lstm_size))
         model.add(Activation('softmax'))

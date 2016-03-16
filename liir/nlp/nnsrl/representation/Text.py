@@ -73,18 +73,51 @@ class Text(list):
         if type == "all":
             for sen in self:
                 for w in sen:
-                    vob.add(w.Word)
+                    vob.add(w.word)
 
         if type == "pred":
             for sen in self:
                 for p in sen.getPredicates():
-                    vob.add(p.Word)
+                    vob.add(p.word)
 
         return vob
 
 
+
+
+
+
 if __name__=="__main__":
     txt = Text()
-    txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/Data/CoNLL2005/conll05st-release/test.brown/test.brown.txt")
- #   txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt")
-    print(len(txt))
+    #txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/Data/CoNLL2005/conll05st-release/test.brown/test.brown.txt")
+    txt.readConll2009Sentences("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-train.txt")
+    s1= txt.getVob()
+
+    txt1 = Text()
+    #txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/Data/CoNLL2005/conll05st-release/test.brown/test.brown.txt")
+    txt1.readConll2009Sentences("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation-ood.txt")
+
+    s2= txt1.getVob()
+    txt2 = Text()
+    #txt.readConll2005Sentences("/Users/quynhdo/Documents/WORKING/Data/CoNLL2005/conll05st-release/test.brown/test.brown.txt")
+    txt2.readConll2009Sentences("/Users/quynhdo/Documents/WORKING/MYWORK/EACL/CoNLL2009-ST-English2/CoNLL2009-ST-English-evaluation.txt")
+
+    s3= txt2.getVob()
+
+    s = s1.union(s2)
+    s= s.union(s3)
+
+    f = open("/Users/quynhdo/Downloads/allWords.txt", "r")
+    vobn = set()
+    for line in f.readlines():
+        line=line.strip()
+        vobn.add(line)
+
+    print (len(vobn))
+    print (len(vobn.intersection(s)))
+
+    print (len(vobn.intersection(s))/len(s))
+
+    print (len(vobn.intersection(s))/len(vobn))
+
+    print (len(s))
